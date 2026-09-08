@@ -16,6 +16,17 @@
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
+        <!-- Role -->
+        <div class="mt-4">
+            <x-input-label for="role" :value="__('Role')" />
+            <select id="role" class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" name="role" required>
+                <option value="">{{ __('Select a role') }}</option>
+                <option value="etudiant" {{ old('role') === 'etudiant' ? 'selected' : '' }}>{{ __('Student') }}</option>
+                <option value="entreprise" {{ old('role') === 'entreprise' ? 'selected' : '' }}>{{ __('Company') }}</option>
+            </select>
+            <x-input-error :messages="$errors->get('role')" class="mt-2" />
+        </div>
+
         <!-- Password -->
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />
