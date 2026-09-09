@@ -29,6 +29,11 @@ class User extends Authenticatable
         return $this->hasMany(CompanyProfile::class);
     }
 
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(Notification::class);
+    }
+
     protected function casts(): array
     {
         return [
