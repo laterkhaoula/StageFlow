@@ -10,7 +10,7 @@ class OffreController extends Controller
     {
         $offres = Offre::with('companyProfile')
             ->latest()
-            ->get();
+            ->paginate(10);
 
         return view('offres.index', compact('offres'));
     }
