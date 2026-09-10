@@ -10,6 +10,7 @@ class OffreController extends Controller
     {
         $keyword = $request->query('keyword');
         $domaine = $request->query('domaine');
+        $localisation = $request->query('localisation');
 
         $query = Offre::with('companyProfile')
             ->latest();
@@ -23,6 +24,10 @@ class OffreController extends Controller
 
         if ($domaine) {
             $query->where('domaine', $domaine);
+        }
+
+        if ($localisation) {
+            $query->where('localisation', $localisation);
         }
 
         $offres = $query->paginate(10)->withQueryString();
