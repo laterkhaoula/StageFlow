@@ -12,27 +12,57 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/profile', [ProfileController::class, 'edit'])
+        ->name('profile.edit');
+
+    Route::patch('/profile', [ProfileController::class, 'update'])
+        ->name('profile.update');
+
+    Route::delete('/profile', [ProfileController::class, 'destroy'])
+        ->name('profile.destroy');
 });
 
-Route::middleware(['auth', 'role:etudiant'])->group(function () {
+/*
+|--------------------------------------------------------------------------
+| Routes Étudiant
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth', 'role.custom:etudiant'])->group(function () {
+
     Route::get('/test/etudiant', function () {
         return response('Accès étudiant autorisé', 200);
     })->name('test.etudiant');
+
 });
 
-Route::middleware(['auth', 'role:entreprise'])->group(function () {
+/*
+|--------------------------------------------------------------------------
+| Routes Entreprise
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth', 'role.custom:entreprise'])->group(function () {
+
     Route::get('/test/entreprise', function () {
         return response('Accès entreprise autorisé', 200);
     })->name('test.entreprise');
+
 });
 
-Route::middleware(['auth', 'role:administrateur'])->group(function () {
+/*
+|--------------------------------------------------------------------------
+| Routes Administrateur
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth', 'role.custom:administrateur'])->group(function () {
+
     Route::get('/test/administrateur', function () {
         return response('Accès administrateur autorisé', 200);
     })->name('test.administrateur');
+
 });
 
 require __DIR__.'/auth.php';
