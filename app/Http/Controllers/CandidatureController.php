@@ -32,6 +32,15 @@ class CandidatureController extends Controller
             return back()->withErrors(['profile' => 'Profil étudiant introuvable.']);
         }
 
+        // Prevent duplicate candidature for the same offer by this student
+        $already = Candidature::where('profil_etudiant_id', $profile->id)
+            ->where('offre_id', $offre->id)
+            ->exists();
+
+        if ($already) {
+            return back()->withErrors(['candidature' => 'Vous avez déjà postulé à cette offre.']);
+        }
+
         // create candidature
         $candidature = Candidature::create([
             'profil_etudiant_id' => $profile->id,
