@@ -32,6 +32,12 @@ class CandidatureController extends Controller
             return back()->withErrors(['profile' => 'Profil étudiant introuvable.']);
         }
 
+        // Prevent applications to inactive/closed offers
+        // Project uses French status values (see OffreFactory): 'ouverte' / 'fermee'
+        if ((string) $offre->statut === 'fermee') {
+            return back()->withErrors(['offre' => "Impossible de postuler : l'offre est inactive."]);
+        }
+
         // Prevent duplicate candidature for the same offer by this student
         $already = Candidature::where('profil_etudiant_id', $profile->id)
             ->where('offre_id', $offre->id)
