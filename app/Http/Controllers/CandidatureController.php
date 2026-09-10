@@ -8,6 +8,27 @@ use App\Models\Candidature;
 class CandidatureController extends Controller
 {
     /**
+     * Display a listing of the authenticated student's candidatures.
+     */
+    public function index(Request $request)
+    {
+        $user = $request->user();
+
+        $profile = $user->studentProfile ?? null;
+        if (!$profile) {
+            return back()->withErrors(['profile' => 'Profil étudiant introuvable.']);
+        }
+
+        $candidatures = Candidature::with(['offre' => function ($q) {
+            $q->select('id', 'titre', 'domaine', 'localisation');
+        }])
+            ->where('profil_etudiant_id', $profile->id)
+            ->orderByDesc('date_candidature')
+            ->get();
+
+        return view('candidatures.index', compact('candidatures'));
+    }
+    /**
      * Store a newly created candidature for an offer by the authenticated student.
      */
     public function store(Request $request)
