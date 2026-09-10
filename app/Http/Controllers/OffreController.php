@@ -6,11 +6,21 @@ use Illuminate\Http\Request;
 
 class OffreController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $offres = Offre::with('companyProfile')
-            ->latest()
-            ->paginate(10);
+        $keyword = $request->query('keyword');
+
+        $query = Offre::with('companyProfile')
+            ->latest();
+
+        if ($keyword) {
+            $query->where(function ($q) use ($keyword) {
+                $q->where('titre', 'like', "%{$keyword}%")
+                  ->orWhere('description', 'like', "%{$keyword}%");
+            });
+        }
+
+        $offres = $query->paginate(10)->withQueryString();
 
         return view('offres.index', compact('offres'));
     }
