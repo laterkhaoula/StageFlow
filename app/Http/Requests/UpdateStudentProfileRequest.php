@@ -25,7 +25,8 @@ class UpdateStudentProfileRequest extends FormRequest
             'address' => ['nullable', 'string', 'max:255'],
             'training_domain' => ['nullable', 'string', 'max:255'],
             'skills' => ['nullable', 'string'],
-            'cv' => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
+            // CV: validate only when present, ensure it's a real uploaded file, PDF mime, max 10MB
+            'cv' => ['sometimes', 'file', 'mimes:pdf', 'mimetypes:application/pdf', 'max:10240'],
         ];
     }
 }
