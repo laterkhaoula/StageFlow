@@ -16,6 +16,20 @@
             placeholder="Rechercher par mot-clé..."
             class="border rounded px-3 py-2 w-64"
         />
+
+        @php
+            $domaines = \DB::table('offres')->distinct()->orderBy('domaine')->pluck('domaine');
+        @endphp
+
+        <div class="flex items-center gap-2">
+            <input list="domaines" name="domaine" value="{{ request('domaine') }}" placeholder="Domaine (saisir ou sélectionner)" class="border rounded px-3 py-2" />
+            <datalist id="domaines">
+                @foreach($domaines as $d)
+                    <option value="{{ $d }}"></option>
+                @endforeach
+            </datalist>
+        </div>
+
         <button type="submit" class="px-3 py-2 bg-blue-600 text-white rounded">Rechercher</button>
     </form>
 
