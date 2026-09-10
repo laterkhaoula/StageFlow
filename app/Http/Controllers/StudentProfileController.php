@@ -67,7 +67,7 @@ class StudentProfileController extends Controller
         // Handle CV upload if present
         if ($request->hasFile('cv')) {
             $file = $request->file('cv');
-            $path = $file->store('cvs'); // stores in storage/app/cvs
+            $path = $file->store('cvs', 'public'); // stores in storage/app/public/cvs
             $validated['cv_path'] = $path;
         }
 
