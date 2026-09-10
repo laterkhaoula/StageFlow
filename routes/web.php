@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\OffreController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -48,6 +49,8 @@ Route::middleware(['auth', 'role.custom:entreprise'])->group(function () {
     Route::get('/test/entreprise', function () {
         return response('Accès entreprise autorisé', 200);
     })->name('test.entreprise');
+
+    Route::resource('offres', OffreController::class);
 
 });
 

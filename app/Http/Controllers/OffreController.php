@@ -1,64 +1,88 @@
 <?php
-
 namespace App\Http\Controllers;
 
+use App\Models\Offre;
 use Illuminate\Http\Request;
 
 class OffreController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $offres = Offre::with('companyProfile')
+            ->latest()
+            ->get();
+
+        return view('offres.index', compact('offres'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('offres.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'titre' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string'],
+            'domaine' => ['required', 'string', 'max:255'],
+            'localisation' => ['required', 'string', 'max:255'],
+            'date_publication' => ['required', 'date'],
+            'statut' => ['required', 'string', 'max:255'],
+        ]);
+
+        // Ila kanet l-relation f-User model smiyatah companyProfile (singular)
+        $companyProfile = $request->user()->companyProfile;
+
+        if (!$companyProfile) {
+            return back()->withErrors(['error' => 'Profil entreprise introuvable.']);
+        }
+
+        $validated['profil_entreprise_id'] = $companyProfile->id;
+
+        Offre::create($validated);
+
+        return redirect()
+            ->route('offres.index')
+            ->with('success', 'Offre créée avec succès.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(Offre $offre)
     {
-        //
+        $offre->load('companyProfile');
+
+        return view('offres.show', compact('offre'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(Offre $offre)
     {
-        //
+        return view('offres.edit', compact('offre'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Offre $offre)
     {
-        //
+        $validated = $request->validate([
+            'titre' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string'],
+            'domaine' => ['required', 'string', 'max:255'],
+            'localisation' => ['required', 'string', 'max:255'],
+            'date_publication' => ['required', 'date'],
+            'statut' => ['required', 'string', 'max:255'],
+        ]);
+
+        $offre->update($validated);
+
+        return redirect()
+            ->route('offres.index')
+            ->with('success', 'Offre modifiée avec succès.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Offre $offre)
     {
-        //
+        $offre->delete();
+
+        return redirect()
+            ->route('offres.index')
+            ->with('success', 'Offre supprimée avec succès.');
     }
 }
