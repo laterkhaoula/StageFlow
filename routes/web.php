@@ -80,4 +80,8 @@ Route::middleware('auth')->group(function () {
 
     Route::put('/student-profile', [StudentProfileController::class, 'update'])
         ->name('student-profile.update');
+    
+    // Secure download route for student's own CV
+    Route::get('/student-profile/cv', [StudentProfileController::class, 'downloadCv'])
+        ->name('student-profile.cv');
 });

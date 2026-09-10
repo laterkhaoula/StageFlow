@@ -68,12 +68,17 @@ class StudentProfileController extends Controller
         // Handle CV upload if present: store new file, remove old file, update path
         if ($request->hasFile('cv')) {
             $file = $request->file('cv');
-            // store new file on public disk
-            $newPath = $file->store('cvs', 'public'); // storage/app/public/cvs
+            // store new file on private local disk
+            $newPath = $file->store('cvs', 'local'); // storage/app/private/cvs
 
-            // remove previous file if present
-            if (!empty($profile->cv_path) && Storage::disk('public')->exists($profile->cv_path)) {
-                Storage::disk('public')->delete($profile->cv_path);
+            // remove previous file if present (try both public and local)
+            if (!empty($profile->cv_path)) {
+                if (Storage::disk('public')->exists($profile->cv_path)) {
+                    Storage::disk('public')->delete($profile->cv_path);
+                }
+                if (Storage::disk('local')->exists($profile->cv_path)) {
+                    Storage::disk('local')->delete($profile->cv_path);
+                }
             }
 
             $validated['cv_path'] = $newPath;
@@ -103,10 +108,10 @@ class StudentProfileController extends Controller
 
         $path = $profile->cv_path;
 
-        if (!Storage::disk('public')->exists($path)) {
+        if (!Storage::disk('local')->exists($path)) {
             return response()->json(['message' => "Fichier CV non trouvé sur le serveur."], 404);
         }
 
-        return Storage::disk('public')->download($path, basename($path));
+        return Storage::disk('local')->download($path, basename($path));
     }
 }
