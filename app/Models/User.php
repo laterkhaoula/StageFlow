@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laratrust\Traits\HasRolesAndPermissions;
@@ -27,6 +28,18 @@ class User extends Authenticatable
     public function companyProfiles(): HasMany
     {
         return $this->hasMany(CompanyProfile::class);
+    }
+
+    public function candidatures(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            \App\Models\Candidature::class,
+            \App\Models\StudentProfile::class,
+            'user_id', // Foreign key on student_profiles table...
+            'profil_etudiant_id', // Foreign key on candidatures table...
+            'id', // Local key on users table
+            'id' // Local key on student_profiles table
+        );
     }
 
     public function notifications(): HasMany
