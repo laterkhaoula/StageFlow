@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\UpdateStudentProfileRequest;
+use Illuminate\Support\Facades\Storage;
 
 class StudentProfileController extends Controller
 {
@@ -64,11 +65,18 @@ class StudentProfileController extends Controller
 
         $validated = $request->validated();
 
-        // Handle CV upload if present
+        // Handle CV upload if present: store new file, remove old file, update path
         if ($request->hasFile('cv')) {
             $file = $request->file('cv');
-            $path = $file->store('cvs', 'public'); // stores in storage/app/public/cvs
-            $validated['cv_path'] = $path;
+            // store new file on public disk
+            $newPath = $file->store('cvs', 'public'); // storage/app/public/cvs
+
+            // remove previous file if present
+            if (!empty($profile->cv_path) && Storage::disk('public')->exists($profile->cv_path)) {
+                Storage::disk('public')->delete($profile->cv_path);
+            }
+
+            $validated['cv_path'] = $newPath;
         }
 
         $profile->fill($validated);
