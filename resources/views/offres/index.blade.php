@@ -8,6 +8,17 @@
         <div class="mb-4 p-3 bg-green-100 text-green-800 rounded">{{ session('success') }}</div>
     @endif
 
+    <form action="{{ route('offres.index') }}" method="GET" class="mb-4 flex items-center gap-2">
+        <input
+            type="text"
+            name="keyword"
+            value="{{ request('keyword') }}"
+            placeholder="Rechercher par mot-clé..."
+            class="border rounded px-3 py-2 w-64"
+        />
+        <button type="submit" class="px-3 py-2 bg-blue-600 text-white rounded">Rechercher</button>
+    </form>
+
     @if($offres->isEmpty())
         <p>Aucune offre trouvée.</p>
     @else
