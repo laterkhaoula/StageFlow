@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\UpdateStudentProfileRequest;
 
 class StudentProfileController extends Controller
 {
@@ -51,7 +52,7 @@ class StudentProfileController extends Controller
     /**
      * Update the authenticated student's profile.
      */
-    public function update(Request $request)
+    public function update(UpdateStudentProfileRequest $request)
     {
         $user = $request->user();
 
@@ -64,12 +65,7 @@ class StudentProfileController extends Controller
             return back()->withErrors(['profile' => 'Profil étudiant introuvable.']);
         }
 
-        $validated = $request->validate([
-            'phone' => ['nullable', 'string', 'max:50'],
-            'address' => ['nullable', 'string', 'max:255'],
-            'training_domain' => ['nullable', 'string', 'max:255'],
-            'skills' => ['nullable', 'string'],
-        ]);
+        $validated = $request->validated();
 
         $profile->fill($validated);
         $profile->save();
