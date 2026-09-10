@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\OffreController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StudentProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -69,3 +70,14 @@ Route::middleware(['auth', 'role.custom:administrateur'])->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+Route::middleware('auth')->group(function () {
+    Route::get('/student-profile', [StudentProfileController::class, 'show'])
+        ->name('student-profile.show');
+
+    Route::get('/student-profile/edit', [StudentProfileController::class, 'edit'])
+        ->name('student-profile.edit');
+
+    Route::put('/student-profile', [StudentProfileController::class, 'update'])
+        ->name('student-profile.update');
+});

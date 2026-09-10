@@ -6,10 +6,7 @@ use App\Http\Requests\UpdateStudentProfileRequest;
 
 class StudentProfileController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    
 
     /**
      * Display the authenticated student's profile.
@@ -66,6 +63,13 @@ class StudentProfileController extends Controller
         }
 
         $validated = $request->validated();
+
+        // Handle CV upload if present
+        if ($request->hasFile('cv')) {
+            $file = $request->file('cv');
+            $path = $file->store('cvs'); // stores in storage/app/cvs
+            $validated['cv_path'] = $path;
+        }
 
         $profile->fill($validated);
         $profile->save();

@@ -17,6 +17,7 @@ class StudentProfile extends Model
         'address',
         'training_domain',
         'skills',
+        'cv_path',
     ];
 
     public function user(): BelongsTo
