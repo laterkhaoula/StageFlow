@@ -36,5 +36,36 @@
             <a href="{{ route('offres.index') }}" class="text-sm text-gray-600">Retour aux offres</a>
         </div>
     </div>
+
+    @auth
+    <div class="container mx-auto py-6 max-w-2xl">
+        <h2 class="text-xl font-semibold mb-3">Postuler à cette offre</h2>
+
+        @if($errors->any())
+            <div class="mb-4 p-3 bg-red-50 border border-red-200 text-red-800 rounded">
+                <ul class="list-disc pl-5">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <form action="{{ route('candidatures.store') }}" method="POST" class="bg-white border rounded p-4 shadow-sm">
+            @csrf
+
+            <input type="hidden" name="offre_id" value="{{ $offre->id }}" />
+
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-1">Message de motivation</label>
+                <textarea name="message_motivation" rows="5" class="w-full border rounded px-3 py-2">{{ old('message_motivation') }}</textarea>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Envoyer la candidature</button>
+            </div>
+        </form>
+    </div>
+    @endauth
 </div>
 @endsection

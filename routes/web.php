@@ -3,6 +3,7 @@
 use App\Http\Controllers\OffreController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentProfileController;
+use App\Http\Controllers\CandidatureController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -36,6 +37,10 @@ Route::middleware(['auth', 'role.custom:etudiant'])->group(function () {
     Route::get('/test/etudiant', function () {
         return response('Accès étudiant autorisé', 200);
     })->name('test.etudiant');
+
+    // Submit a candidature for an offer
+    Route::post('/candidatures', [CandidatureController::class, 'store'])
+        ->name('candidatures.store');
 
 });
 
