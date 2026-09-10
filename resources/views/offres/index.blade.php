@@ -30,6 +30,8 @@
             </datalist>
         </div>
 
+        <input type="text" name="localisation" value="{{ request('localisation') }}" placeholder="Localisation" class="border rounded px-3 py-2" />
+
         <button type="submit" class="px-3 py-2 bg-blue-600 text-white rounded">Rechercher</button>
     </form>
 
