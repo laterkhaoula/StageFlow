@@ -84,4 +84,29 @@ class StudentProfileController extends Controller
 
         return redirect()->back()->with('success', 'Profil étudiant mis à jour.');
     }
+
+    /**
+     * Download the authenticated student's CV.
+     */
+    public function downloadCv(Request $request)
+    {
+        $user = $request->user();
+
+        $profile = null;
+        if ($user) {
+            $profile = $user->studentProfile ?? null;
+        }
+
+        if (!$profile || empty($profile->cv_path)) {
+            return response()->json(['message' => "CV introuvable."], 404);
+        }
+
+        $path = $profile->cv_path;
+
+        if (!Storage::disk('public')->exists($path)) {
+            return response()->json(['message' => "Fichier CV non trouvé sur le serveur."], 404);
+        }
+
+        return Storage::disk('public')->download($path, basename($path));
+    }
 }
