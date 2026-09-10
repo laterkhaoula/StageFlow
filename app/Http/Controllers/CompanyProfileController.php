@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\UpdateCompanyProfileRequest;
 
 class CompanyProfileController extends Controller
 {
@@ -46,7 +47,7 @@ class CompanyProfileController extends Controller
     /**
      * Update the authenticated company's profile.
      */
-    public function update(Request $request)
+    public function update(UpdateCompanyProfileRequest $request)
     {
         $user = $request->user();
 
@@ -59,12 +60,7 @@ class CompanyProfileController extends Controller
             return back()->withErrors(['profile' => 'Profil entreprise introuvable.']);
         }
 
-        $data = $request->validate([
-            'nom_entreprise' => ['required', 'string', 'max:255'],
-            'secteur' => ['nullable', 'string', 'max:255'],
-            'contact' => ['nullable', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-        ]);
+        $data = $request->validated();
 
         $profile->fill($data);
         $profile->save();
