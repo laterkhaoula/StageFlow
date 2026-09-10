@@ -9,6 +9,7 @@ class OffreController extends Controller
     public function index(Request $request)
     {
         $keyword = $request->query('keyword');
+        $domaine = $request->query('domaine');
 
         $query = Offre::with('companyProfile')
             ->latest();
@@ -18,6 +19,10 @@ class OffreController extends Controller
                 $q->where('titre', 'like', "%{$keyword}%")
                   ->orWhere('description', 'like', "%{$keyword}%");
             });
+        }
+
+        if ($domaine) {
+            $query->where('domaine', $domaine);
         }
 
         $offres = $query->paginate(10)->withQueryString();
