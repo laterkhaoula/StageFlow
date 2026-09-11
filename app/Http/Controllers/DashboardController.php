@@ -25,4 +25,35 @@ class DashboardController extends Controller
             'offresActives'
         ));
     }
+
+    public function company(Request $request)
+    {
+        $user = $request->user();
+
+        $companyProfileIds = $user->companyProfiles()->pluck('id');
+
+        $offres = Offre::query()
+            ->whereIn('profil_entreprise_id', $companyProfileIds)
+            ->with('candidatures')
+            ->get();
+
+        $totalOffres = $offres->count();
+        $offresActives = $offres->where('statut', 'ouverte')->count();
+        $offresInactives = $offres->where('statut', 'fermee')->count();
+
+        $totalCandidatures = $offres->sum(fn ($offre) => $offre->candidatures->count());
+        $candidaturesEnAttente = $offres->sum(fn ($offre) => $offre->candidatures->where('statut', 'en_attente')->count());
+        $candidaturesAcceptees = $offres->sum(fn ($offre) => $offre->candidatures->where('statut', 'acceptee')->count());
+        $candidaturesRefusees = $offres->sum(fn ($offre) => $offre->candidatures->where('statut', 'refusee')->count());
+
+        return view('company-dashboard', compact(
+            'totalOffres',
+            'offresActives',
+            'offresInactives',
+            'totalCandidatures',
+            'candidaturesEnAttente',
+            'candidaturesAcceptees',
+            'candidaturesRefusees'
+        ));
+    }
 }

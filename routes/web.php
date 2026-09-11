@@ -64,6 +64,9 @@ Route::middleware(['auth', 'role.custom:entreprise'])->group(function () {
         return response('Accès entreprise autorisé', 200);
     })->name('test.entreprise');
 
+    Route::get('/company-dashboard', [DashboardController::class, 'company'])
+        ->name('company.dashboard');
+
     Route::resource('offres', OffreController::class);
 
 });
