@@ -57,6 +57,37 @@ class CandidatureController extends Controller
 
         return view('candidatures.company_index', compact('candidatures'));
     }
+
+    /**
+     * Display the student profile for a candidature belonging to this company's offer.
+     */
+    public function companyShow(Request $request, $candidatureId)
+    {
+        $user = $request->user();
+
+        // get company profile ids for this user
+        $companyProfileIds = $user->companyProfiles()->pluck('id')->toArray();
+
+        if (empty($companyProfileIds)) {
+            return back()->withErrors(['company' => 'Profil entreprise introuvable.']);
+        }
+
+        $candidature = Candidature::with(['offre', 'studentProfile.user'])->find($candidatureId);
+
+        if (!$candidature) {
+            return back()->withErrors(['candidature' => 'Candidature introuvable.']);
+        }
+
+        // Ensure the offer belongs to one of the company's profiles
+        $offre = $candidature->offre;
+        if (!$offre || !in_array($offre->profil_entreprise_id, $companyProfileIds, true)) {
+            abort(403);
+        }
+
+        $profile = $candidature->studentProfile;
+
+        return view('candidatures.company_show', compact('candidature', 'profile'));
+    }
     /**
      * Store a newly created candidature for an offer by the authenticated student.
      */
