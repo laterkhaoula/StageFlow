@@ -133,6 +133,10 @@ class CandidatureController extends Controller
         $this->authorize('companyManage', $candidature);
 
         $ancien = $candidature->statut;
+        if ($ancien === 'acceptee') {
+            return redirect()->back()->with('info', 'Candidature déjà acceptée.');
+        }
+
         $candidature->statut = 'acceptee';
         $candidature->save();
 
@@ -144,6 +148,11 @@ class CandidatureController extends Controller
                 'nouveau_statut' => 'acceptee',
                 'date_changement' => now(),
             ]);
+        }
+
+        $studentUser = $candidature->studentProfile?->user;
+        if ($studentUser) {
+            $studentUser->notify(new \App\Notifications\CandidatureStatusUpdatedNotification($candidature, 'acceptee'));
         }
 
         return redirect()->back()->with('success', 'Candidature acceptée.');
@@ -167,6 +176,10 @@ class CandidatureController extends Controller
         $this->authorize('companyManage', $candidature);
 
         $ancien = $candidature->statut;
+        if ($ancien === 'refusee') {
+            return redirect()->back()->with('info', 'Candidature déjà refusée.');
+        }
+
         $candidature->statut = 'refusee';
         $candidature->save();
 
@@ -177,6 +190,11 @@ class CandidatureController extends Controller
                 'nouveau_statut' => 'refusee',
                 'date_changement' => now(),
             ]);
+        }
+
+        $studentUser = $candidature->studentProfile?->user;
+        if ($studentUser) {
+            $studentUser->notify(new \App\Notifications\CandidatureStatusUpdatedNotification($candidature, 'refusee'));
         }
 
         return redirect()->back()->with('success', 'Candidature refusée.');
