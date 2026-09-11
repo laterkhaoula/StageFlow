@@ -27,4 +27,9 @@ class Candidature extends Model
     {
         return $this->belongsTo(Offre::class);
     }
+
+    public function histories()
+    {
+        return $this->hasMany(CandidatureHistory::class, 'candidature_id');
+    }
 }
