@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OffreController;
@@ -81,6 +82,15 @@ Route::middleware(['auth', 'role.custom:administrateur'])->group(function () {
 
     Route::get('/admin-dashboard', [DashboardController::class, 'admin'])
         ->name('admin.dashboard');
+
+    Route::get('/admin/users', [AdminController::class, 'users'])
+        ->name('admin.users');
+
+    Route::get('/admin/offres', [AdminController::class, 'offres'])
+        ->name('admin.offres');
+
+    Route::get('/admin/candidatures', [AdminController::class, 'candidatures'])
+        ->name('admin.candidatures');
 
     Route::get('/test/administrateur', function () {
         return response('Accès administrateur autorisé', 200);
