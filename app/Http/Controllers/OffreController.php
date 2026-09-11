@@ -76,12 +76,7 @@ class OffreController extends Controller
 
     public function edit(Offre $offre)
     {
-        $companyProfile = request()->user()->companyProfile;
-
-        if (!$companyProfile || (int) $offre->profil_entreprise_id !== (int) $companyProfile->id) {
-            abort(403);
-        }
-
+        $this->authorize('update', $offre);
         return view('offres.edit', compact('offre'));
     }
 
@@ -96,12 +91,7 @@ class OffreController extends Controller
             'statut' => ['required', 'string', 'max:255'],
         ]);
 
-        $companyProfile = $request->user()->companyProfile;
-
-        if (!$companyProfile || (int) $offre->profil_entreprise_id !== (int) $companyProfile->id) {
-            abort(403);
-        }
-
+        $this->authorize('update', $offre);
         $offre->update($validated);
 
         return redirect()
@@ -111,12 +101,7 @@ class OffreController extends Controller
 
     public function destroy(Offre $offre)
     {
-        $companyProfile = request()->user()->companyProfile;
-
-        if (!$companyProfile || (int) $offre->profil_entreprise_id !== (int) $companyProfile->id) {
-            abort(403);
-        }
-
+        $this->authorize('delete', $offre);
         $offre->delete();
 
         return redirect()

@@ -66,25 +66,18 @@ class CandidatureController extends Controller
     public function companyShow(Request $request, $candidatureId)
     {
         $user = $request->user();
-
-        // get company profile ids for this user
+        // ensure user has at least one company profile
         $companyProfileIds = $user->companyProfiles()->pluck('id')->toArray();
-
         if (empty($companyProfileIds)) {
             return back()->withErrors(['company' => 'Profil entreprise introuvable.']);
         }
 
         $candidature = Candidature::with(['offre', 'studentProfile.user'])->find($candidatureId);
-
-        if (!$candidature) {
+        if (! $candidature) {
             return back()->withErrors(['candidature' => 'Candidature introuvable.']);
         }
 
-        // Ensure the offer belongs to one of the company's profiles
-        $offre = $candidature->offre;
-        if (!$offre || !in_array($offre->profil_entreprise_id, $companyProfileIds, true)) {
-            abort(403);
-        }
+        $this->authorize('companyView', $candidature);
 
         $profile = $candidature->studentProfile;
 
@@ -97,21 +90,8 @@ class CandidatureController extends Controller
     public function companyDownloadCv(Request $request, $candidatureId)
     {
         $user = $request->user();
-
-        if (!$user) {
+        if (! $user) {
             abort(401);
-        }
-
-        // ensure user has entreprise role
-        if (! method_exists($user, 'hasRole') || ! $user->hasRole('entreprise')) {
-            abort(403);
-        }
-
-        // company profiles of this user
-        $companyProfileIds = $user->companyProfiles()->pluck('id')->toArray();
-
-        if (empty($companyProfileIds)) {
-            abort(403);
         }
 
         $candidature = Candidature::with(['offre', 'studentProfile'])->find($candidatureId);
@@ -119,10 +99,7 @@ class CandidatureController extends Controller
             abort(404);
         }
 
-        $offre = $candidature->offre;
-        if (! $offre || ! in_array($offre->profil_entreprise_id, $companyProfileIds, true)) {
-            abort(403);
-        }
+        $this->authorize('companyManage', $candidature);
 
         $profile = $candidature->studentProfile;
         if (! $profile || empty($profile->cv_path)) {
@@ -148,24 +125,12 @@ class CandidatureController extends Controller
             abort(401);
         }
 
-        if (! method_exists($user, 'hasRole') || ! $user->hasRole('entreprise')) {
-            abort(403);
-        }
-
-        $companyProfileIds = $user->companyProfiles()->pluck('id')->toArray();
-        if (empty($companyProfileIds)) {
-            abort(403);
-        }
-
         $candidature = Candidature::with('offre')->find($candidatureId);
         if (! $candidature) {
             return back()->withErrors(['candidature' => 'Candidature introuvable.']);
         }
 
-        $offre = $candidature->offre;
-        if (! $offre || ! in_array($offre->profil_entreprise_id, $companyProfileIds, true)) {
-            abort(403);
-        }
+        $this->authorize('companyManage', $candidature);
 
         $ancien = $candidature->statut;
         $candidature->statut = 'acceptee';
@@ -194,24 +159,12 @@ class CandidatureController extends Controller
             abort(401);
         }
 
-        if (! method_exists($user, 'hasRole') || ! $user->hasRole('entreprise')) {
-            abort(403);
-        }
-
-        $companyProfileIds = $user->companyProfiles()->pluck('id')->toArray();
-        if (empty($companyProfileIds)) {
-            abort(403);
-        }
-
         $candidature = Candidature::with('offre')->find($candidatureId);
         if (! $candidature) {
             return back()->withErrors(['candidature' => 'Candidature introuvable.']);
         }
 
-        $offre = $candidature->offre;
-        if (! $offre || ! in_array($offre->profil_entreprise_id, $companyProfileIds, true)) {
-            abort(403);
-        }
+        $this->authorize('companyManage', $candidature);
 
         $ancien = $candidature->statut;
         $candidature->statut = 'refusee';
