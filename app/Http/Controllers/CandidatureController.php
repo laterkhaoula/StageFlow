@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Models\Offre;
 use App\Models\Candidature;
 use App\Models\CompanyProfile;
+use Illuminate\Support\Facades\Storage;
 
 class CandidatureController extends Controller
 {
@@ -87,6 +88,53 @@ class CandidatureController extends Controller
         $profile = $candidature->studentProfile;
 
         return view('candidatures.company_show', compact('candidature', 'profile'));
+    }
+
+    /**
+     * Securely download a candidate's CV for a candidature belonging to this company's offer.
+     */
+    public function companyDownloadCv(Request $request, $candidatureId)
+    {
+        $user = $request->user();
+
+        if (!$user) {
+            abort(401);
+        }
+
+        // ensure user has entreprise role
+        if (! method_exists($user, 'hasRole') || ! $user->hasRole('entreprise')) {
+            abort(403);
+        }
+
+        // company profiles of this user
+        $companyProfileIds = $user->companyProfiles()->pluck('id')->toArray();
+
+        if (empty($companyProfileIds)) {
+            abort(403);
+        }
+
+        $candidature = Candidature::with(['offre', 'studentProfile'])->find($candidatureId);
+        if (! $candidature) {
+            abort(404);
+        }
+
+        $offre = $candidature->offre;
+        if (! $offre || ! in_array($offre->profil_entreprise_id, $companyProfileIds, true)) {
+            abort(403);
+        }
+
+        $profile = $candidature->studentProfile;
+        if (! $profile || empty($profile->cv_path)) {
+            return back()->withErrors(['cv' => 'CV non disponible.']);
+        }
+
+        $path = $profile->cv_path;
+
+        if (! Storage::disk('local')->exists($path)) {
+            return back()->withErrors(['cv' => 'Fichier introuvable.']);
+        }
+
+        return Storage::disk('local')->download($path, basename($path));
     }
     /**
      * Store a newly created candidature for an offer by the authenticated student.
