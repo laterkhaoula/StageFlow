@@ -183,6 +183,51 @@ class CandidatureController extends Controller
 
         return redirect()->back()->with('success', 'Candidature acceptée.');
     }
+
+    /**
+     * Refuse a candidature (company action).
+     */
+    public function companyRefuse(Request $request, $candidatureId)
+    {
+        $user = $request->user();
+        if (! $user) {
+            abort(401);
+        }
+
+        if (! method_exists($user, 'hasRole') || ! $user->hasRole('entreprise')) {
+            abort(403);
+        }
+
+        $companyProfileIds = $user->companyProfiles()->pluck('id')->toArray();
+        if (empty($companyProfileIds)) {
+            abort(403);
+        }
+
+        $candidature = Candidature::with('offre')->find($candidatureId);
+        if (! $candidature) {
+            return back()->withErrors(['candidature' => 'Candidature introuvable.']);
+        }
+
+        $offre = $candidature->offre;
+        if (! $offre || ! in_array($offre->profil_entreprise_id, $companyProfileIds, true)) {
+            abort(403);
+        }
+
+        $ancien = $candidature->statut;
+        $candidature->statut = 'refusee';
+        $candidature->save();
+
+        if (class_exists(\App\Models\CandidatureHistory::class)) {
+            \App\Models\CandidatureHistory::create([
+                'candidature_id' => $candidature->id,
+                'ancien_statut' => $ancien,
+                'nouveau_statut' => 'refusee',
+                'date_changement' => now(),
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Candidature refusée.');
+    }
     /**
      * Store a newly created candidature for an offer by the authenticated student.
      */
