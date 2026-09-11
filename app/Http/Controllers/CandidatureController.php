@@ -74,7 +74,8 @@ class CandidatureController extends Controller
             'offre_id' => $offre->id,
             'message_motivation' => $data['message_motivation'],
             'date_candidature' => now()->toDateString(),
-            'statut' => 'pending',
+            // use project-consistent French status values (see CandidatureFactory)
+            'statut' => 'en_attente',
         ]);
 
         return redirect()->back()->with('success', 'Candidature envoyée.');

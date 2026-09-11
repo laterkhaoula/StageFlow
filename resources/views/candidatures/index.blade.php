@@ -13,7 +13,7 @@
                 </div>
                 <div class="text-sm text-gray-600">
                     <div>Date : {{ $candidature->date_candidature }}</div>
-                    <div>Statut : <span class="font-medium">{{ $candidature->statut }}</span></div>
+                    <div>Statut : <span class="font-medium">{{ ucfirst(str_replace('_', ' ', $candidature->statut)) }}</span></div>
                 </div>
             </div>
 
