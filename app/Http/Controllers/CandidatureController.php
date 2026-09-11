@@ -231,6 +231,16 @@ class CandidatureController extends Controller
             'statut' => 'en_attente',
         ]);
 
+        // Notify the company owner about the new candidature using Laravel native notifications
+        try {
+            $companyUser = $offre->companyProfile->user ?? null;
+            if ($companyUser) {
+                $companyUser->notify(new \App\Notifications\NewCandidatureNotification($candidature));
+            }
+        } catch (\Throwable $e) {
+            // swallow notification exceptions to avoid breaking candidature creation
+        }
+
         return redirect()->back()->with('success', 'Candidature envoyée.');
     }
 }
