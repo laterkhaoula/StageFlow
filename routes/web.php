@@ -79,6 +79,9 @@ Route::middleware(['auth', 'role.custom:entreprise'])->group(function () {
 
 Route::middleware(['auth', 'role.custom:administrateur'])->group(function () {
 
+    Route::get('/admin-dashboard', [DashboardController::class, 'admin'])
+        ->name('admin.dashboard');
+
     Route::get('/test/administrateur', function () {
         return response('Accès administrateur autorisé', 200);
     })->name('test.administrateur');

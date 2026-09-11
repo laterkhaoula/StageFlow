@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Candidature;
 use App\Models\Offre;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -50,6 +52,35 @@ class DashboardController extends Controller
             'totalOffres',
             'offresActives',
             'offresInactives',
+            'totalCandidatures',
+            'candidaturesEnAttente',
+            'candidaturesAcceptees',
+            'candidaturesRefusees'
+        ));
+    }
+
+    public function admin()
+    {
+        $totalUtilisateurs = User::query()->count();
+        $totalEtudiants = User::query()->where('role', 'etudiant')->count();
+        $totalEntreprises = User::query()->where('role', 'entreprise')->count();
+        $totalAdministrateurs = User::query()->where('role', 'administrateur')->count();
+
+        $totalOffres = Offre::query()->count();
+        $offresActives = Offre::query()->where('statut', 'ouverte')->count();
+
+        $totalCandidatures = Candidature::query()->count();
+        $candidaturesEnAttente = Candidature::query()->where('statut', 'en_attente')->count();
+        $candidaturesAcceptees = Candidature::query()->where('statut', 'acceptee')->count();
+        $candidaturesRefusees = Candidature::query()->where('statut', 'refusee')->count();
+
+        return view('admin-dashboard', compact(
+            'totalUtilisateurs',
+            'totalEtudiants',
+            'totalEntreprises',
+            'totalAdministrateurs',
+            'totalOffres',
+            'offresActives',
             'totalCandidatures',
             'candidaturesEnAttente',
             'candidaturesAcceptees',
