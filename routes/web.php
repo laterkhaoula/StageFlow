@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CompanyProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OffreController;
@@ -51,6 +52,18 @@ Route::middleware(['auth', 'role.custom:etudiant'])->group(function () {
     Route::post('/candidatures', [CandidatureController::class, 'store'])
         ->name('candidatures.store');
 
+    Route::get('/student-profile', [StudentProfileController::class, 'show'])
+        ->name('student-profile.show');
+
+    Route::get('/student-profile/edit', [StudentProfileController::class, 'edit'])
+        ->name('student-profile.edit');
+
+    Route::put('/student-profile', [StudentProfileController::class, 'update'])
+        ->name('student-profile.update');
+
+    Route::get('/student-profile/cv', [StudentProfileController::class, 'downloadCv'])
+        ->name('student-profile.cv');
+
 });
 
 /*
@@ -67,6 +80,15 @@ Route::middleware(['auth', 'role.custom:entreprise'])->group(function () {
 
     Route::get('/company-dashboard', [DashboardController::class, 'company'])
         ->name('company.dashboard');
+
+    Route::get('/company-profile', [CompanyProfileController::class, 'show'])
+        ->name('company-profile.show');
+
+    Route::get('/company-profile/edit', [CompanyProfileController::class, 'edit'])
+        ->name('company-profile.edit');
+
+    Route::put('/company-profile', [CompanyProfileController::class, 'update'])
+        ->name('company-profile.update');
 
     Route::resource('offres', OffreController::class);
 
@@ -99,18 +121,3 @@ Route::middleware(['auth', 'role.custom:administrateur'])->group(function () {
 });
 
 require __DIR__.'/auth.php';
-
-Route::middleware('auth')->group(function () {
-    Route::get('/student-profile', [StudentProfileController::class, 'show'])
-        ->name('student-profile.show');
-
-    Route::get('/student-profile/edit', [StudentProfileController::class, 'edit'])
-        ->name('student-profile.edit');
-
-    Route::put('/student-profile', [StudentProfileController::class, 'update'])
-        ->name('student-profile.update');
-    
-    // Secure download route for student's own CV
-    Route::get('/student-profile/cv', [StudentProfileController::class, 'downloadCv'])
-        ->name('student-profile.cv');
-});

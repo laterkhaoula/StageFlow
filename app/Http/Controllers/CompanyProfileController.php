@@ -22,7 +22,7 @@ class CompanyProfileController extends Controller
             return back()->withErrors(['profile' => 'Profil entreprise introuvable.']);
         }
 
-        return view('company_profiles.show', compact('profile'));
+        return view('company-profile.show', compact('profile'));
     }
 
     /**
@@ -41,7 +41,7 @@ class CompanyProfileController extends Controller
             return back()->withErrors(['profile' => 'Profil entreprise introuvable.']);
         }
 
-        return view('company_profiles.edit', compact('profile'));
+        return view('company-profile.edit', compact('profile'));
     }
 
     /**
@@ -65,6 +65,6 @@ class CompanyProfileController extends Controller
         $profile->fill($data);
         $profile->save();
 
-        return redirect('/company-profile')->with('success', 'Profil entreprise mis à jour.');
+        return redirect()->route('company-profile.show')->with('success', 'Profil entreprise mis à jour.');
     }
 }

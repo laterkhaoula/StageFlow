@@ -2,7 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Models\CompanyProfile;
 use App\Models\Role;
+use App\Models\StudentProfile;
 use App\Models\User;
 use Database\Seeders\LaratrustSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -126,5 +128,41 @@ class RoleMiddlewareTest extends TestCase
         $response = $this->actingAs($user)->get(route('test.administrateur'));
 
         $response->assertStatus(403);
+    }
+
+    public function test_student_profile_route_requires_student_role(): void
+    {
+        $student = User::factory()->create();
+        $studentRole = Role::where('name', 'etudiant')->first();
+        $student->addRole($studentRole);
+        StudentProfile::factory()->create(['user_id' => $student->id]);
+
+        $studentResponse = $this->actingAs($student)->get(route('student-profile.show'));
+        $studentResponse->assertStatus(200);
+
+        $company = User::factory()->create();
+        $companyRole = Role::where('name', 'entreprise')->first();
+        $company->addRole($companyRole);
+
+        $companyResponse = $this->actingAs($company)->get(route('student-profile.show'));
+        $companyResponse->assertStatus(403);
+    }
+
+    public function test_company_profile_route_requires_company_role(): void
+    {
+        $company = User::factory()->create();
+        $companyRole = Role::where('name', 'entreprise')->first();
+        $company->addRole($companyRole);
+        CompanyProfile::factory()->create(['user_id' => $company->id]);
+
+        $companyResponse = $this->actingAs($company)->get(route('company-profile.show'));
+        $companyResponse->assertStatus(200);
+
+        $student = User::factory()->create();
+        $studentRole = Role::where('name', 'etudiant')->first();
+        $student->addRole($studentRole);
+
+        $studentResponse = $this->actingAs($student)->get(route('company-profile.show'));
+        $studentResponse->assertStatus(403);
     }
 }
