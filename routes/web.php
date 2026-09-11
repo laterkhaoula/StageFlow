@@ -20,6 +20,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index'])
         ->name('notifications.index');
 
+    Route::post('/notifications/{notificationId}/read', [NotificationController::class, 'markAsRead'])
+        ->name('notifications.read');
+
     Route::get('/profile', [ProfileController::class, 'edit'])
         ->name('profile.edit');
 

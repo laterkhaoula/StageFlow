@@ -19,13 +19,22 @@
                             <th class="border px-4 py-2 text-left">Message</th>
                             <th class="border px-4 py-2 text-left">Date</th>
                             <th class="border px-4 py-2 text-left">État</th>
+                            <th class="border px-4 py-2 text-left">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($notifications as $notification)
+                            @php
+                                $message = $notification->data['message']
+                                    ?? (
+                                        (($notification->data['status'] ?? null) && ($notification->data['offre_title'] ?? null))
+                                            ? 'Candidature '.($notification->data['status'] ?? '').' pour '.$notification->data['offre_title']
+                                            : ($notification->data['status'] ?? 'Notification')
+                                    );
+                            @endphp
                             <tr>
                                 <td class="border px-4 py-2">
-                                    {{ $notification->data['message'] ?? $notification->data['status'] ?? 'Notification' }}
+                                    {{ $message }}
                                 </td>
                                 <td class="border px-4 py-2">
                                     {{ $notification->created_at ? $notification->created_at->format('d/m/Y H:i') : '-' }}
@@ -35,6 +44,16 @@
                                         <span>Lu</span>
                                     @else
                                         <span>Non lu</span>
+                                    @endif
+                                </td>
+                                <td class="border px-4 py-2">
+                                    @if(is_null($notification->read_at))
+                                        <form method="POST" action="{{ route('notifications.read', $notification->id) }}">
+                                            @csrf
+                                            <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded">Marquer comme lu</button>
+                                        </form>
+                                    @else
+                                        <span class="text-gray-500">Déjà lu</span>
                                     @endif
                                 </td>
                             </tr>
