@@ -1,38 +1,56 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Candidatures') }}
-        </h2>
-    </x-slot>
+    <div class="page-container">
+        <div class="mb-8">
+            <h1 class="page-title">Supervision des candidatures</h1>
+            <p class="page-subtitle">Suivre l'historique global des candidatures déposées par les étudiants.</p>
+        </div>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    <table class="min-w-full divide-y divide-gray-200">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            @if($candidatures->isEmpty())
+                <div class="p-12 text-center text-slate-600">Aucune candidature enregistrée pour le moment.</div>
+            @else
+                <div class="table-wrap border-0">
+                    <table class="data-table">
                         <thead>
                             <tr>
-                                <th class="px-4 py-2 text-left">Candidat</th>
-                                <th class="px-4 py-2 text-left">Offre</th>
-                                <th class="px-4 py-2 text-left">Entreprise</th>
-                                <th class="px-4 py-2 text-left">Statut</th>
-                                <th class="px-4 py-2 text-left">Date</th>
+                                <th>Candidat</th>
+                                <th>Offre visée</th>
+                                <th>Entreprise</th>
+                                <th>Statut actuel</th>
+                                <th class="text-right">Date de dépôt</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($candidatures as $candidature)
                                 <tr>
-                                    <td class="px-4 py-2">{{ $candidature->studentProfile?->user?->name ?? '—' }}</td>
-                                    <td class="px-4 py-2">{{ $candidature->offre?->titre ?? '—' }}</td>
-                                    <td class="px-4 py-2">{{ $candidature->offre?->companyProfile?->nom_entreprise ?? '—' }}</td>
-                                    <td class="px-4 py-2">{{ $candidature->statut }}</td>
-                                    <td class="px-4 py-2">{{ $candidature->created_at->format('d/m/Y H:i') }}</td>
+                                    <td class="font-bold text-slate-900">
+                                        {{ $candidature->studentProfile?->user?->name ?? 'Candidat inconnu' }}
+                                    </td>
+                                    <td class="text-slate-800 font-medium">
+                                        {{ $candidature->offre?->titre ?? 'Offre introuvable' }}
+                                    </td>
+                                    <td class="text-slate-700">
+                                        {{ $candidature->offre?->companyProfile?->nom_entreprise ?? 'Confidentielle' }}
+                                    </td>
+                                    <td>
+                                        <span class="badge {{ $candidature->statut === 'acceptee' ? 'badge-success' : ($candidature->statut === 'refusee' ? 'badge-danger' : 'badge-pending') }}">
+                                            {{ $candidature->statut === 'acceptee' ? 'Acceptée' : ($candidature->statut === 'refusee' ? 'Refusée' : 'En attente') }}
+                                        </span>
+                                    </td>
+                                    <td class="text-right text-xs text-slate-500 font-medium whitespace-nowrap">
+                                        {{ $candidature->created_at ? $candidature->created_at->format('d/m/Y à H:i') : '-' }}
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
-            </div>
+            @endif
+            @if($candidatures->hasPages())
+                <div class="p-4 border-t border-slate-100 flex justify-center">
+                    {{ $candidatures->links() }}
+                </div>
+            @endif
         </div>
     </div>
 </x-app-layout>

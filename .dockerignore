@@ -1,0 +1,3 @@
+# Lien storage:link (reparse point Windows) — fourni à l'exécution par le
+# bind mount .:/var/www ; il casse le transfert du contexte de build Docker.
+public/storage

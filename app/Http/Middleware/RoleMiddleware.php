@@ -21,25 +21,18 @@ class RoleMiddleware
             abort(403);
         }
 
-        $laratrustRoles = method_exists($user, 'roles') ? $user->roles()->get() : collect();
+        $userRoles = $user->roles;
 
-        if ($laratrustRoles->isNotEmpty()) {
-            $hasRequiredRole = $laratrustRoles->contains(
-                fn ($userRole) => strtolower((string) ($userRole->name ?? '')) === strtolower($role)
-            );
-
-            if (! $hasRequiredRole) {
-                abort(403);
-            }
+        if ($userRoles->isNotEmpty()) {
+            abort_unless($userRoles->contains('name', $role), 403);
 
             return $next($request);
         }
 
-        $hasLegacyRole = is_string($user->role ?? null) && strtolower((string) $user->role) === strtolower($role);
-
-        if (! $hasLegacyRole) {
-            abort(403);
-        }
+        abort_unless(
+            is_string($user->role ?? null) && strtolower((string) $user->role) === strtolower($role),
+            403
+        );
 
         return $next($request);
     }

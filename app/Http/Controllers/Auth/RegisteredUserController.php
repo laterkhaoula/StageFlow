@@ -42,15 +42,26 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => $request->role,
         ]);
 
         $role = Role::where('name', $request->role)->first();
         $user->addRole($role);
 
+        if ($request->role === 'etudiant') {
+            $user->studentProfile()->create([]);
+        } elseif ($request->role === 'entreprise') {
+            $user->companyProfiles()->create([
+                'nom_entreprise' => '', // complété par l'utilisateur via son profil
+                'secteur' => '',
+                'contact' => '',
+            ]);
+        }
+
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect(route($user->dashboardRoute(), absolute: false));
     }
 }

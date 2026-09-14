@@ -1,63 +1,68 @@
 <x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
+    <div class="mb-6">
+        <h1 class="text-2xl font-extrabold text-slate-900">Créer votre compte StageFlow</h1>
+        <p class="mt-1 text-sm text-slate-600">Rejoignez la plateforme en tant qu'étudiant ou entreprise.</p>
+    </div>
+
+    <form method="POST" action="{{ route('register') }}" class="space-y-4">
         @csrf
 
-        <!-- Name -->
+        <!-- Nom -->
         <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
+            <x-input-label for="name" value="Nom complet ou nom de l'entreprise" />
+            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" placeholder="Votre nom" required autofocus autocomplete="name" />
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
 
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
+        <!-- Email -->
+        <div>
+            <x-input-label for="email" value="Adresse e-mail" />
+            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" placeholder="exemple@domaine.com" required autocomplete="username" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
-        <!-- Role -->
-        <div class="mt-4">
-            <x-input-label for="role" :value="__('Role')" />
-            <select id="role" class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" name="role" required>
-                <option value="">{{ __('Select a role') }}</option>
-                <option value="etudiant" {{ old('role') === 'etudiant' ? 'selected' : '' }}>{{ __('Student') }}</option>
-                <option value="entreprise" {{ old('role') === 'entreprise' ? 'selected' : '' }}>{{ __('Company') }}</option>
+        <!-- Rôle -->
+        <div>
+            <x-input-label for="role" value="Vous êtes ?" />
+            <select id="role" class="form-select mt-1" name="role" required>
+                <option value="">Sélectionnez votre profil</option>
+                <option value="etudiant" {{ old('role') === 'etudiant' ? 'selected' : '' }}>Étudiant (À la recherche d'un stage)</option>
+                <option value="entreprise" {{ old('role') === 'entreprise' ? 'selected' : '' }}>Entreprise / Recruteur (Publication d'offres)</option>
             </select>
             <x-input-error :messages="$errors->get('role')" class="mt-2" />
         </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
+        <!-- Mot de passe -->
+        <div>
+            <x-input-label for="password" value="Mot de passe" />
             <x-text-input id="password" class="block mt-1 w-full"
                             type="password"
                             name="password"
+                            placeholder="••••••••"
                             required autocomplete="new-password" />
-
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
+        <!-- Confirmation du mot de passe -->
+        <div>
+            <x-input-label for="password_confirmation" value="Confirmer le mot de passe" />
             <x-text-input id="password_confirmation" class="block mt-1 w-full"
                             type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
-
+                            name="password_confirmation"
+                            placeholder="••••••••"
+                            required autocomplete="new-password" />
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
+        <div class="pt-2">
+            <button type="submit" class="btn btn-primary w-full h-11 text-base">
+                Créer mon compte
+            </button>
+        </div>
 
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
+        <div class="mt-4 text-center text-sm text-slate-600">
+            Vous avez déjà un compte ?
+            <a href="{{ route('login') }}" class="font-bold text-blue-600 hover:text-blue-800 ml-1">Se connecter</a>
         </div>
     </form>
 </x-guest-layout>

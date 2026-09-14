@@ -1,12 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto py-6">
-    <h1 class="text-2xl font-semibold mb-4">Créer une offre</h1>
+<div class="page-container max-w-3xl">
+    <div class="mb-8">
+        <h1 class="page-title">Publier une nouvelle offre de stage</h1>
+        <p class="page-subtitle">Renseignez les détails du poste et le profil recherché pour attirer des candidats qualifiés.</p>
+    </div>
 
     @if($errors->any())
-        <div class="mb-4 p-3 bg-red-50 border border-red-200 text-red-800 rounded">
-            <ul class="list-disc pl-5">
+        <div class="alert alert-error mb-6">
+            <p class="font-bold">Veuillez corriger les erreurs ci-dessous :</p>
+            <ul class="list-disc pl-5 mt-1 space-y-1">
                 @foreach($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
@@ -14,60 +18,71 @@
         </div>
     @endif
 
-    <form action="{{ route('offres.store') }}" method="POST" class="space-y-4 max-w-lg">
+    <form action="{{ route('offres.company.store') }}" method="POST" class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
         @csrf
 
         <div>
-            <label class="block text-sm font-medium mb-1">Titre</label>
-            <input type="text" name="titre" value="{{ old('titre') }}" class="w-full border rounded px-3 py-2" />
+            <label class="form-label" for="titre">Titre du poste ou de l'offre</label>
+            <input type="text" id="titre" name="titre" value="{{ old('titre') }}" placeholder="ex: Stage Développeur Web Fullstack (PFE)" class="form-input" />
             @if($errors->has('titre'))
-                <div class="text-red-600 text-sm mt-1">{{ $errors->first('titre') }}</div>
+                <p class="text-red-600 text-xs mt-1 font-medium">{{ $errors->first('titre') }}</p>
             @endif
         </div>
 
         <div>
-            <label class="block text-sm font-medium mb-1">Description</label>
-            <textarea name="description" rows="4" class="w-full border rounded px-3 py-2">{{ old('description') }}</textarea>
+            <label class="form-label" for="description">Description détaillée du stage</label>
+            <textarea id="description" name="description" rows="6" class="form-textarea" placeholder="Décrivez les missions, le contexte, les compétences requises et le profil idéal...">{{ old('description') }}</textarea>
             @if($errors->has('description'))
-                <div class="text-red-600 text-sm mt-1">{{ $errors->first('description') }}</div>
+                <p class="text-red-600 text-xs mt-1 font-medium">{{ $errors->first('description') }}</p>
             @endif
         </div>
 
-        <div>
-            <label class="block text-sm font-medium mb-1">Domaine</label>
-            <input type="text" name="domaine" value="{{ old('domaine') }}" class="w-full border rounded px-3 py-2" />
-            @if($errors->has('domaine'))
-                <div class="text-red-600 text-sm mt-1">{{ $errors->first('domaine') }}</div>
-            @endif
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div>
+                <label class="form-label" for="domaine">Domaine d'activité</label>
+                <input type="text" id="domaine" name="domaine" value="{{ old('domaine') }}" placeholder="ex: Informatique, Design, Vente..." class="form-input" />
+                @if($errors->has('domaine'))
+                    <p class="text-red-600 text-xs mt-1 font-medium">{{ $errors->first('domaine') }}</p>
+                @endif
+            </div>
+
+            <div>
+                <label class="form-label" for="localisation">Localisation</label>
+                <input type="text" id="localisation" name="localisation" value="{{ old('localisation') }}" placeholder="ex: Casablanca, Télétravail, Paris..." class="form-input" />
+                @if($errors->has('localisation'))
+                    <p class="text-red-600 text-xs mt-1 font-medium">{{ $errors->first('localisation') }}</p>
+                @endif
+            </div>
         </div>
 
-        <div>
-            <label class="block text-sm font-medium mb-1">Localisation</label>
-            <input type="text" name="localisation" value="{{ old('localisation') }}" class="w-full border rounded px-3 py-2" />
-            @if($errors->has('localisation'))
-                <div class="text-red-600 text-sm mt-1">{{ $errors->first('localisation') }}</div>
-            @endif
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div>
+                <label class="form-label" for="date_publication">Date de publication</label>
+                <input type="date" id="date_publication" name="date_publication" value="{{ old('date_publication', date('Y-m-d')) }}" class="form-input" />
+                @if($errors->has('date_publication'))
+                    <p class="text-red-600 text-xs mt-1 font-medium">{{ $errors->first('date_publication') }}</p>
+                @endif
+            </div>
+
+            <div>
+                <label class="form-label" for="statut">Statut de l'offre</label>
+                <select id="statut" name="statut" class="form-select">
+                    <option value="ouverte" {{ old('statut') === 'ouverte' ? 'selected' : '' }}>Offre active (ouverte)</option>
+                    <option value="fermee" {{ old('statut') === 'fermee' ? 'selected' : '' }}>Offre inactive (masquée)</option>
+                </select>
+                @if($errors->has('statut'))
+                    <p class="text-red-600 text-xs mt-1 font-medium">{{ $errors->first('statut') }}</p>
+                @endif
+            </div>
         </div>
 
-        <div>
-            <label class="block text-sm font-medium mb-1">Date de publication</label>
-            <input type="date" name="date_publication" value="{{ old('date_publication') }}" class="w-full border rounded px-3 py-2" />
-            @if($errors->has('date_publication'))
-                <div class="text-red-600 text-sm mt-1">{{ $errors->first('date_publication') }}</div>
-            @endif
-        </div>
-
-        <div>
-            <label class="block text-sm font-medium mb-1">Statut</label>
-            <input type="text" name="statut" value="{{ old('statut') }}" class="w-full border rounded px-3 py-2" />
-            @if($errors->has('statut'))
-                <div class="text-red-600 text-sm mt-1">{{ $errors->first('statut') }}</div>
-            @endif
-        </div>
-
-        <div class="flex items-center gap-3">
-            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Créer</button>
-            <a href="{{ route('offres.index') }}" class="text-sm text-gray-600">Retour à la liste</a>
+        <div class="flex items-center gap-4 pt-6 border-t border-slate-100">
+            <button type="submit" class="btn btn-primary">
+                Publier l'offre de stage
+            </button>
+            <a href="{{ route('offres.company.index') }}" class="btn btn-secondary">
+                Annuler
+            </a>
         </div>
     </form>
 </div>

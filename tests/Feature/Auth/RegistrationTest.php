@@ -41,6 +41,7 @@ class RegistrationTest extends TestCase
         $user = User::where('email', 'student@example.com')->first();
         $this->assertNotNull($user);
         $this->assertTrue($user->hasRole('etudiant'));
+        $this->assertEquals('etudiant', $user->role);
     }
 
     public function test_new_users_can_register_as_entreprise(): void
@@ -54,11 +55,12 @@ class RegistrationTest extends TestCase
         ]);
 
         $this->assertAuthenticated();
-        $response->assertRedirect(route('dashboard', absolute: false));
+        $response->assertRedirect(route('company.dashboard', absolute: false));
 
         $user = User::where('email', 'company@example.com')->first();
         $this->assertNotNull($user);
         $this->assertTrue($user->hasRole('entreprise'));
+        $this->assertEquals('entreprise', $user->role);
     }
 
     public function test_user_cannot_register_as_administrateur(): void

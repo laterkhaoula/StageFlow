@@ -12,9 +12,9 @@ class AdminController extends Controller
     public function users()
     {
         $users = User::query()
-            ->select('id', 'name', 'email', 'role', 'created_at')
+            ->with('roles')
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate(20);
 
         return view('admin.users', compact('users'));
     }
@@ -24,7 +24,7 @@ class AdminController extends Controller
         $offres = Offre::query()
             ->with('companyProfile')
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate(20);
 
         return view('admin.offres', compact('offres'));
     }
@@ -34,7 +34,7 @@ class AdminController extends Controller
         $candidatures = Candidature::query()
             ->with(['studentProfile.user', 'offre.companyProfile'])
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate(20);
 
         return view('admin.candidatures', compact('candidatures'));
     }

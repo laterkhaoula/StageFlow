@@ -1,63 +1,87 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard administrateur') }}
-        </h2>
-    </x-slot>
+    <div class="page-container">
+        <!-- Dashboard Header -->
+        <div class="mb-8 bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm">
+            <h1 class="text-3xl font-extrabold text-slate-900">
+                Administration
+            </h1>
+            <p class="mt-2 text-base text-slate-600">
+                Vue d'ensemble et supervision globale de la plateforme StageFlow.
+            </p>
+        </div>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                    <div class="text-sm text-gray-500">Utilisateurs</div>
-                    <div class="mt-2 text-3xl font-bold text-gray-900">{{ $totalUtilisateurs }}</div>
-                </div>
-
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                    <div class="text-sm text-gray-500">Étudiants</div>
-                    <div class="mt-2 text-3xl font-bold text-blue-600">{{ $totalEtudiants }}</div>
-                </div>
-
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                    <div class="text-sm text-gray-500">Entreprises</div>
-                    <div class="mt-2 text-3xl font-bold text-green-600">{{ $totalEntreprises }}</div>
-                </div>
-
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                    <div class="text-sm text-gray-500">Administrateurs</div>
-                    <div class="mt-2 text-3xl font-bold text-purple-600">{{ $totalAdministrateurs }}</div>
-                </div>
-
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                    <div class="text-sm text-gray-500">Offres</div>
-                    <div class="mt-2 text-3xl font-bold text-indigo-600">{{ $totalOffres }}</div>
-                </div>
-
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                    <div class="text-sm text-gray-500">Offres actives</div>
-                    <div class="mt-2 text-3xl font-bold text-emerald-600">{{ $offresActives }}</div>
-                </div>
-
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                    <div class="text-sm text-gray-500">Candidatures</div>
-                    <div class="mt-2 text-3xl font-bold text-sky-600">{{ $totalCandidatures }}</div>
-                </div>
-
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                    <div class="text-sm text-gray-500">En attente</div>
-                    <div class="mt-2 text-3xl font-bold text-yellow-600">{{ $candidaturesEnAttente }}</div>
-                </div>
-
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                    <div class="text-sm text-gray-500">Acceptées</div>
-                    <div class="mt-2 text-3xl font-bold text-green-600">{{ $candidaturesAcceptees }}</div>
-                </div>
-
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                    <div class="text-sm text-gray-500">Refusées</div>
-                    <div class="mt-2 text-3xl font-bold text-red-600">{{ $candidaturesRefusees }}</div>
-                </div>
+        <!-- Global Platform Metrics -->
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-4 sm:gap-6 mb-10">
+            <div class="stat-card">
+                <div class="stat-label">Utilisateurs</div>
+                <div class="stat-value text-slate-900">{{ $totalUtilisateurs }}</div>
             </div>
+
+            <div class="stat-card">
+                <div class="stat-label">Étudiants</div>
+                <div class="stat-value text-blue-600">{{ $totalEtudiants }}</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">Entreprises</div>
+                <div class="stat-value text-purple-600">{{ $totalEntreprises }}</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">Offres</div>
+                <div class="stat-value text-emerald-600">{{ $totalOffres }}</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">Candidatures</div>
+                <div class="stat-value text-amber-600">{{ $totalCandidatures }}</div>
+            </div>
+        </div>
+
+        <!-- Section Administration Modules -->
+        <h2 class="text-xl font-bold text-slate-900 mb-4">Supervision et gestion</h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <a href="{{ route('admin.users') }}" class="group bg-white rounded-2xl border border-slate-200 p-6 shadow-sm hover:border-blue-300 hover:shadow-md transition-all">
+                <div class="h-10 w-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors mb-4">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900">Utilisateurs</h3>
+                <p class="mt-1 text-sm text-slate-600">Gérer les comptes étudiants, entreprises et administrateurs.</p>
+            </a>
+
+            <a href="{{ route('admin.offres') }}" class="group bg-white rounded-2xl border border-slate-200 p-6 shadow-sm hover:border-blue-300 hover:shadow-md transition-all">
+                <div class="h-10 w-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-colors mb-4">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 132.883v-4.883a2 2 0 00-2-2H5a2 2 0 00-2 2v4.883" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900">Offres de stage</h3>
+                <p class="mt-1 text-sm text-slate-600">Superviser et valider les {{ $totalOffres }} offres de la plateforme.</p>
+            </a>
+
+            <a href="{{ route('admin.candidatures') }}" class="group bg-white rounded-2xl border border-slate-200 p-6 shadow-sm hover:border-blue-300 hover:shadow-md transition-all">
+                <div class="h-10 w-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600 group-hover:bg-amber-600 group-hover:text-white transition-colors mb-4">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900">Candidatures</h3>
+                <p class="mt-1 text-sm text-slate-600">Suivre l'historique complet des {{ $totalCandidatures }} candidatures.</p>
+            </a>
+
+            <a href="{{ route('notifications.index') }}" class="group bg-white rounded-2xl border border-slate-200 p-6 shadow-sm hover:border-blue-300 hover:shadow-md transition-all">
+                <div class="h-10 w-10 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600 group-hover:bg-purple-600 group-hover:text-white transition-colors mb-4">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900">Notifications</h3>
+                <p class="mt-1 text-sm text-slate-600">Consulter les alertes système et les notifications d'activité.</p>
+            </a>
         </div>
     </div>
 </x-app-layout>

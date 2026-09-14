@@ -12,11 +12,11 @@ class OffrePolicy
      */
     public function update(User $user, Offre $offre): bool
     {
-        if (! method_exists($user, 'hasRole') || ! $user->hasRole('entreprise')) {
+        if (! $user->isEntreprise()) {
             return false;
         }
 
-        $companyIds = $user->companyProfiles()->pluck('id')->toArray();
+        $companyIds = $user->companyProfileIds()->toArray();
         return in_array($offre->profil_entreprise_id, $companyIds, true);
     }
 

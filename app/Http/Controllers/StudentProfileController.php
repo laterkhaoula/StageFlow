@@ -1,84 +1,50 @@
 <?php
+
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Requests\UpdateStudentProfileRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class StudentProfileController extends Controller
 {
-    
-
-    /**
-     * Display the authenticated student's profile.
-     */
     public function show(Request $request)
     {
-        $user = $request->user();
+        $profile = $request->user()->studentProfile;
 
-        $profile = null;
-        if ($user) {
-            $profile = $user->studentProfile ?? null;
-        }
-
-        if (!$profile) {
+        if (! $profile) {
             return back()->withErrors(['profile' => 'Profil étudiant introuvable.']);
         }
 
         return view('student_profiles.show', compact('profile'));
     }
 
-    /**
-     * Show the form for editing the authenticated student's profile.
-     */
     public function edit(Request $request)
     {
-        $user = $request->user();
+        $profile = $request->user()->studentProfile;
 
-        $profile = null;
-        if ($user) {
-            $profile = $user->studentProfile ?? null;
-        }
-
-        if (!$profile) {
+        if (! $profile) {
             return back()->withErrors(['profile' => 'Profil étudiant introuvable.']);
         }
 
         return view('student_profiles.edit', compact('profile'));
     }
 
-    /**
-     * Update the authenticated student's profile.
-     */
     public function update(UpdateStudentProfileRequest $request)
     {
-        $user = $request->user();
+        $profile = $request->user()->studentProfile;
 
-        $profile = null;
-        if ($user) {
-            $profile = $user->studentProfile ?? null;
-        }
-
-        if (!$profile) {
+        if (! $profile) {
             return back()->withErrors(['profile' => 'Profil étudiant introuvable.']);
         }
 
         $validated = $request->validated();
 
-        // Handle CV upload if present: store new file, remove old file, update path
         if ($request->hasFile('cv')) {
-            $file = $request->file('cv');
-            // store new file on private local disk
-            $newPath = $file->store('cvs', 'local'); // storage/app/private/cvs
+            $newPath = $request->file('cv')->store('cvs', 'local');
 
-            // remove previous file if present (try both public and local)
-            if (!empty($profile->cv_path)) {
-                if (Storage::disk('public')->exists($profile->cv_path)) {
-                    Storage::disk('public')->delete($profile->cv_path);
-                }
-                if (Storage::disk('local')->exists($profile->cv_path)) {
-                    Storage::disk('local')->delete($profile->cv_path);
-                }
+            if (! empty($profile->cv_path)) {
+                Storage::disk('local')->delete($profile->cv_path);
             }
 
             $validated['cv_path'] = $newPath;
@@ -87,29 +53,21 @@ class StudentProfileController extends Controller
         $profile->fill($validated);
         $profile->save();
 
-        return redirect()->back()->with('success', 'Profil étudiant mis à jour.');
+        return redirect()->route('student-profile.show')->with('success', 'Profil étudiant mis à jour.');
     }
 
-    /**
-     * Download the authenticated student's CV.
-     */
     public function downloadCv(Request $request)
     {
-        $user = $request->user();
+        $profile = $request->user()->studentProfile;
 
-        $profile = null;
-        if ($user) {
-            $profile = $user->studentProfile ?? null;
-        }
-
-        if (!$profile || empty($profile->cv_path)) {
-            return response()->json(['message' => "CV introuvable."], 404);
+        if (! $profile || empty($profile->cv_path)) {
+            return back()->withErrors(['cv' => 'CV introuvable.']);
         }
 
         $path = $profile->cv_path;
 
-        if (!Storage::disk('local')->exists($path)) {
-            return response()->json(['message' => "Fichier CV non trouvé sur le serveur."], 404);
+        if (! Storage::disk('local')->exists($path)) {
+            return back()->withErrors(['cv' => 'Fichier CV non trouvé sur le serveur.']);
         }
 
         return Storage::disk('local')->download($path, basename($path));

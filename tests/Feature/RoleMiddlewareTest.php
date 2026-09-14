@@ -22,7 +22,7 @@ class RoleMiddlewareTest extends TestCase
 
     public function test_unauthenticated_user_cannot_access_protected_route(): void
     {
-        $response = $this->get(route('test.etudiant'));
+        $response = $this->get(route('student-profile.show'));
 
         $response->assertStatus(302);
         $response->assertRedirect(route('login'));
@@ -34,10 +34,9 @@ class RoleMiddlewareTest extends TestCase
         $role = Role::where('name', 'etudiant')->first();
         $user->addRole($role);
 
-        $response = $this->actingAs($user)->get(route('test.etudiant'));
+        $response = $this->actingAs($user)->get(route('dashboard'));
 
         $response->assertStatus(200);
-        $response->assertSee('Accès étudiant autorisé');
     }
 
     public function test_entreprise_cannot_access_etudiant_route(): void
@@ -46,7 +45,7 @@ class RoleMiddlewareTest extends TestCase
         $role = Role::where('name', 'entreprise')->first();
         $user->addRole($role);
 
-        $response = $this->actingAs($user)->get(route('test.etudiant'));
+        $response = $this->actingAs($user)->get(route('dashboard'));
 
         $response->assertStatus(403);
     }
@@ -57,7 +56,7 @@ class RoleMiddlewareTest extends TestCase
         $role = Role::where('name', 'administrateur')->first();
         $user->addRole($role);
 
-        $response = $this->actingAs($user)->get(route('test.etudiant'));
+        $response = $this->actingAs($user)->get(route('dashboard'));
 
         $response->assertStatus(403);
     }
@@ -68,10 +67,9 @@ class RoleMiddlewareTest extends TestCase
         $role = Role::where('name', 'entreprise')->first();
         $user->addRole($role);
 
-        $response = $this->actingAs($user)->get(route('test.entreprise'));
+        $response = $this->actingAs($user)->get(route('company.dashboard'));
 
         $response->assertStatus(200);
-        $response->assertSee('Accès entreprise autorisé');
     }
 
     public function test_etudiant_cannot_access_entreprise_route(): void
@@ -80,7 +78,7 @@ class RoleMiddlewareTest extends TestCase
         $role = Role::where('name', 'etudiant')->first();
         $user->addRole($role);
 
-        $response = $this->actingAs($user)->get(route('test.entreprise'));
+        $response = $this->actingAs($user)->get(route('company.dashboard'));
 
         $response->assertStatus(403);
     }
@@ -91,7 +89,7 @@ class RoleMiddlewareTest extends TestCase
         $role = Role::where('name', 'administrateur')->first();
         $user->addRole($role);
 
-        $response = $this->actingAs($user)->get(route('test.entreprise'));
+        $response = $this->actingAs($user)->get(route('company.dashboard'));
 
         $response->assertStatus(403);
     }
@@ -102,10 +100,9 @@ class RoleMiddlewareTest extends TestCase
         $role = Role::where('name', 'administrateur')->first();
         $user->addRole($role);
 
-        $response = $this->actingAs($user)->get(route('test.administrateur'));
+        $response = $this->actingAs($user)->get(route('admin.dashboard'));
 
         $response->assertStatus(200);
-        $response->assertSee('Accès administrateur autorisé');
     }
 
     public function test_etudiant_cannot_access_administrateur_route(): void
@@ -114,7 +111,7 @@ class RoleMiddlewareTest extends TestCase
         $role = Role::where('name', 'etudiant')->first();
         $user->addRole($role);
 
-        $response = $this->actingAs($user)->get(route('test.administrateur'));
+        $response = $this->actingAs($user)->get(route('admin.dashboard'));
 
         $response->assertStatus(403);
     }
@@ -125,7 +122,7 @@ class RoleMiddlewareTest extends TestCase
         $role = Role::where('name', 'entreprise')->first();
         $user->addRole($role);
 
-        $response = $this->actingAs($user)->get(route('test.administrateur'));
+        $response = $this->actingAs($user)->get(route('admin.dashboard'));
 
         $response->assertStatus(403);
     }

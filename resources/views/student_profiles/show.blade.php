@@ -1,61 +1,99 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto py-6">
-    <div class="max-w-3xl mx-auto">
-        <div class="bg-white shadow rounded-lg overflow-hidden">
-            <div class="px-6 py-4 border-b">
-                <h1 class="text-xl font-semibold text-gray-800">Profil étudiant</h1>
+<div class="page-container max-w-4xl">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+        <div>
+            <h1 class="page-title">Mon profil étudiant</h1>
+            <p class="page-subtitle">Ces informations et votre CV sont présentés aux recruteurs lors de vos candidatures.</p>
+        </div>
+        <a href="{{ route('student-profile.edit') }}" class="btn btn-secondary flex items-center">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            </svg>
+            Modifier mes informations
+        </a>
+    </div>
+
+    @if(session('success'))
+        <div class="alert alert-success mb-6">{{ session('success') }}</div>
+    @endif
+
+    <!-- Zone Mon CV -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm mb-8">
+        <div class="flex items-center justify-between pb-6 border-b border-slate-100 mb-6">
+            <div class="flex items-center gap-3">
+                <div class="h-10 w-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                </div>
+                <h2 class="text-xl font-bold text-slate-900">Mon CV</h2>
+            </div>
+            @if(!empty($profile->cv_path))
+                <span class="badge badge-success">CV à jour</span>
+            @else
+                <span class="badge badge-pending">Aucun CV joint</span>
+            @endif
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            @if(!empty($profile->cv_path))
+                <p class="text-sm text-slate-600">Un CV est actuellement enregistré sur votre profil et sera joint à vos candidatures.</p>
+                <div class="flex flex-wrap items-center gap-3 shrink-0">
+                    <a href="{{ route('student-profile.cv') }}" target="_blank" rel="noopener" class="btn btn-primary flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        Télécharger le CV
+                    </a>
+                    <a href="{{ route('student-profile.edit') }}" class="btn btn-secondary">
+                        Modifier le CV
+                    </a>
+                </div>
+            @else
+                <p class="text-sm text-slate-600">Vous n'avez pas encore ajouté de CV. Un CV professionnel augmente considérablement vos chances de recrutement.</p>
+                <a href="{{ route('student-profile.edit') }}" class="btn btn-primary whitespace-nowrap">
+                    + Ajouter mon CV
+                </a>
+            @endif
+        </div>
+    </div>
+
+    <!-- Informations Personnelles -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm">
+        <h2 class="text-xl font-bold text-slate-900 pb-6 border-b border-slate-100 mb-6">Informations personnelles & formation</h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div>
+                <span class="text-xs font-semibold uppercase tracking-wider text-slate-500 block mb-1">Nom complet</span>
+                <span class="text-base font-bold text-slate-900">{{ $profile->user->name ?? '—' }}</span>
             </div>
 
-            <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="md:col-span-2 space-y-4">
-                    <div>
-                        <div class="text-sm text-gray-500">Nom</div>
-                        <div class="text-gray-800 font-medium">{{ $profile->user->name ?? '—' }}</div>
-                    </div>
+            <div>
+                <span class="text-xs font-semibold uppercase tracking-wider text-slate-500 block mb-1">Adresse Email</span>
+                <span class="text-base font-bold text-slate-900">{{ $profile->user->email ?? '—' }}</span>
+            </div>
 
-                    <div>
-                        <div class="text-sm text-gray-500">Email</div>
-                        <div class="text-gray-800">{{ $profile->user->email ?? '—' }}</div>
-                    </div>
+            <div>
+                <span class="text-xs font-semibold uppercase tracking-wider text-slate-500 block mb-1">Numéro de téléphone</span>
+                <span class="text-base text-slate-800 font-medium">{{ $profile->phone ?? 'Non renseigné' }}</span>
+            </div>
 
-                    <div>
-                        <div class="text-sm text-gray-500">Téléphone</div>
-                        <div class="text-gray-800">{{ $profile->phone ?? '—' }}</div>
-                    </div>
+            <div>
+                <span class="text-xs font-semibold uppercase tracking-wider text-slate-500 block mb-1">Adresse postale</span>
+                <span class="text-base text-slate-800 font-medium">{{ $profile->address ?? 'Non renseignée' }}</span>
+            </div>
 
-                    <div>
-                        <div class="text-sm text-gray-500">Adresse</div>
-                        <div class="text-gray-800">{{ $profile->address ?? '—' }}</div>
-                    </div>
+            <div class="sm:col-span-2 pt-4 border-t border-slate-100">
+                <span class="text-xs font-semibold uppercase tracking-wider text-slate-500 block mb-1">Domaine de formation</span>
+                <span class="text-base text-slate-900 font-bold">{{ $profile->training_domain ?? 'Non renseigné' }}</span>
+            </div>
 
-                    <div>
-                        <div class="text-sm text-gray-500">Domaine de formation</div>
-                        <div class="text-gray-800">{{ $profile->training_domain ?? '—' }}</div>
-                    </div>
-
-                    <div>
-                        <div class="text-sm text-gray-500">Compétences</div>
-                        <div class="text-gray-800 whitespace-pre-wrap">{{ $profile->skills ?? '—' }}</div>
-                    </div>
-                </div>
-
-                <div class="md:col-span-1 flex flex-col items-stretch gap-4">
-                    <div class="bg-gray-50 p-4 rounded">
-                        <div class="text-sm text-gray-500">CV</div>
-                        @if(!empty($profile->cv_path))
-                            <a href="{{ Storage::url($profile->cv_path) }}" target="_blank" rel="noopener" class="mt-3 inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-                                Télécharger le CV
-                            </a>
-                        @else
-                            <div class="text-gray-500 mt-2">Aucun CV téléchargé</div>
-                        @endif
-                    </div>
-
-                    <div class="flex mt-auto">
-                        <a href="{{ route('student-profile.edit') }}" class="w-full text-center px-4 py-2 bg-yellow-500 text-white rounded">Modifier</a>
-                    </div>
+            <div class="sm:col-span-2">
+                <span class="text-xs font-semibold uppercase tracking-wider text-slate-500 block mb-2">Compétences & savoir-faire</span>
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 text-slate-800 text-sm whitespace-pre-wrap leading-relaxed">
+                    {{ $profile->skills ?? 'Aucune compétence renseignée pour le moment.' }}
                 </div>
             </div>
         </div>

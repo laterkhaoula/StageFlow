@@ -12,11 +12,11 @@ class CandidaturePolicy
      */
     public function companyView(User $user, Candidature $candidature): bool
     {
-        if (! method_exists($user, 'hasRole') || ! $user->hasRole('entreprise')) {
+        if (! $user->isEntreprise()) {
             return false;
         }
 
-        $companyIds = $user->companyProfiles()->pluck('id')->toArray();
+        $companyIds = $user->companyProfileIds()->toArray();
 
         $offre = $candidature->offre;
         if (! $offre) {
