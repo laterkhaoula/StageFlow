@@ -4,7 +4,7 @@
 
 @layer base {
     body {
-        @apply bg-slate-50 text-slate-900 antialiased font-sans;
+        @apply bg-[#F3F6F9] text-slate-900 antialiased font-sans;
     }
 
     [x-cloak] {
@@ -36,11 +36,11 @@
 
     /* Cards */
     .card {
-        @apply rounded-xl border border-slate-200 bg-white shadow-sm;
+        @apply rounded-2xl border border-slate-200 bg-white shadow-sm;
     }
 
     .card-header {
-        @apply flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 px-6 py-4 bg-white rounded-t-xl;
+        @apply flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 px-6 py-4 bg-white rounded-t-2xl;
     }
 
     .card-body {
@@ -49,11 +49,11 @@
 
     /* Buttons */
     .btn {
-        @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 shadow-sm;
+        @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-2.5 text-sm font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 shadow-sm;
     }
 
     .btn-primary {
-        @apply bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500 active:bg-blue-800;
+        @apply bg-[#2563EB] text-white hover:bg-blue-700 focus:ring-blue-500 active:bg-blue-800;
     }
 
     .btn-success {
@@ -69,11 +69,11 @@
     }
 
     .btn-sm {
-        @apply px-3.5 py-1.5 text-xs rounded-lg;
+        @apply px-3.5 py-1.5 text-xs;
     }
 
     .btn-link {
-        @apply text-sm font-semibold text-blue-600 hover:text-blue-800 hover:underline;
+        @apply text-sm font-semibold text-[#2563EB] hover:text-blue-800 hover:underline;
     }
 
     /* Form */
@@ -84,7 +84,7 @@
     .form-input,
     .form-select,
     .form-textarea {
-        @apply block w-full rounded-xl border-slate-300 bg-white text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-blue-500 focus:ring-blue-500 transition-colors;
+        @apply block w-full rounded-lg border-slate-300 bg-white text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-[#2563EB] focus:ring-[#2563EB] transition-colors;
     }
 
     /* Alerts */
@@ -127,7 +127,7 @@
 
     /* Tables */
     .table-wrap {
-        @apply overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm;
+        @apply overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm;
     }
 
     .data-table {
@@ -156,7 +156,7 @@
 
     /* Stat cards */
     .stat-card {
-        @apply rounded-xl border border-slate-200 bg-white p-6 shadow-sm flex flex-col justify-between;
+        @apply rounded-2xl border border-slate-200 bg-white p-6 shadow-sm flex flex-col justify-between;
     }
 
     .stat-label {

@@ -4,13 +4,25 @@
         $dashboardRoute = $user?->dashboardRoute() ?? 'dashboard';
     @endphp
 
-    <!-- ================= HEADER (blanc) ================= -->
-    <header class="sticky top-0 z-40 bg-white border-b border-gray-200">
+    <!-- ================= HEADER (blanc, style Stage.ma) ================= -->
+    <header class="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
             <!-- Logo (toujours vers /) -->
             <a href="{{ url('/') }}" class="flex items-center gap-2.5 shrink-0">
-                <span class="text-blue-600"><x-application-logo class="block h-8 w-auto" /></span>
-                <span class="text-xl font-bold tracking-tight text-gray-900">StageFlow</span>
+                <span class="relative flex h-9 w-9 items-center justify-center rounded-xl bg-[#2563EB] text-white">
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7l-5-5z" />
+                        <path d="M14 2v5h5" />
+                        <path d="M9 13h6" />
+                        <path d="M9 17h4" />
+                    </svg>
+                    <span class="absolute -bottom-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[#F59E0B]">
+                        <svg class="h-2 w-2 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 13l4 4L19 7" />
+                        </svg>
+                    </span>
+                </span>
+                <span class="text-xl font-bold tracking-tight text-slate-900">StageFlow</span>
             </a>
 
             <!-- Navigation centrale -->
@@ -66,7 +78,7 @@
             <!-- Actions à droite -->
             <div class="flex items-center gap-3">
                 @if($user && $user->isEntreprise())
-                    <a href="{{ route('offres.company.create') }}" class="hidden sm:inline-flex items-center justify-center px-4 py-2 text-sm font-semibold rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors shadow-sm">
+                    <a href="{{ route('offres.company.create') }}" class="hidden sm:inline-flex items-center justify-center px-5 py-2.5 text-sm font-semibold rounded-full bg-[#2563EB] text-white hover:bg-blue-700 transition-colors shadow-sm">
                         + Nouvelle offre
                     </a>
                 @endif
@@ -74,8 +86,8 @@
                 <div class="hidden sm:flex">
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
-                            <button class="inline-flex items-center gap-2.5 px-3 py-1.5 text-sm leading-5 font-medium rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 focus:outline-none transition ease-in-out duration-150">
-                                <span class="flex items-center justify-center h-7 w-7 rounded-full bg-blue-600 text-xs font-bold text-white">{{ mb_substr(Auth::user()->name, 0, 1) }}</span>
+                            <button class="inline-flex items-center gap-2.5 px-3 py-1.5 text-sm leading-5 font-medium rounded-full bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 focus:outline-none transition ease-in-out duration-150">
+                                <span class="flex items-center justify-center h-7 w-7 rounded-full bg-[#2563EB] text-xs font-bold text-white">{{ mb_substr(Auth::user()->name, 0, 1) }}</span>
                                 <div class="hidden md:block font-semibold text-slate-800">{{ Auth::user()->name }}</div>
                                 <div class="ms-1">
                                     <svg class="fill-current h-4 w-4 text-slate-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -104,7 +116,7 @@
                 </div>
 
                 <!-- Hamburger -->
-                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 focus:outline-none sm:ms-1 lg:hidden">
+                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 focus:outline-none sm:ms-1 lg:hidden" aria-label="Ouvrir le menu">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -115,7 +127,7 @@
     </header>
 
     <!-- ================= MENU MOBILE ================= -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden lg:hidden bg-white border-b border-slate-200">
+    <div :class="{'block': open, 'hidden': ! open}" class="hidden lg:hidden bg-white border-b border-slate-200 shadow-md">
         <div class="pt-2 pb-3 space-y-1 px-2">
             <x-responsive-nav-link :href="url('/')" :active="request()->is('/')">
                 {{ __('Accueil') }}
@@ -140,7 +152,7 @@
                     {{ __('Mes offres') }}
                 </x-responsive-nav-link>
                 <div class="px-3 pt-2">
-                    <a href="{{ route('offres.company.create') }}" class="inline-flex w-full items-center justify-center h-10 px-4 text-sm font-semibold rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors">
+                    <a href="{{ route('offres.company.create') }}" class="inline-flex w-full items-center justify-center h-10 px-4 text-sm font-semibold rounded-full bg-[#2563EB] text-white hover:bg-blue-700 transition-colors">
                         {{ __('+ Nouvelle offre') }}
                     </a>
                 </div>
