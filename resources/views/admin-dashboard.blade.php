@@ -72,16 +72,6 @@
                 <h3 class="text-lg font-bold text-slate-900">Candidatures</h3>
                 <p class="mt-1 text-sm text-slate-600">Suivre l'historique complet des {{ $totalCandidatures }} candidatures.</p>
             </a>
-
-            <a href="{{ route('notifications.index') }}" class="group bg-white rounded-2xl border border-slate-200 p-6 shadow-sm hover:border-blue-300 hover:shadow-md transition-all">
-                <div class="h-10 w-10 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600 group-hover:bg-purple-600 group-hover:text-white transition-colors mb-4">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                    </svg>
-                </div>
-                <h3 class="text-lg font-bold text-slate-900">Notifications</h3>
-                <p class="mt-1 text-sm text-slate-600">Consulter les alertes système et les notifications d'activité.</p>
-            </a>
         </div>
     </div>
 </x-app-layout>

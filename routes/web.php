@@ -131,8 +131,20 @@ Route::middleware(['auth', 'role.custom:administrateur'])->group(function () {
     Route::get('/admin/users', [AdminController::class, 'users'])
         ->name('admin.users');
 
+    Route::delete('/admin/users/{user}', [AdminController::class, 'destroyUser'])
+        ->name('admin.users.destroy');
+
+    Route::post('/admin/users/{user}/toggle-block', [AdminController::class, 'toggleBlock'])
+        ->name('admin.users.toggle-block');
+
     Route::get('/admin/offres', [AdminController::class, 'offres'])
         ->name('admin.offres');
+
+    Route::post('/admin/offres/{offre}/toggle-status', [AdminController::class, 'toggleOffreStatus'])
+        ->name('admin.offres.toggle-status');
+
+    Route::delete('/admin/offres/{offre}', [AdminController::class, 'destroyOffre'])
+        ->name('admin.offres.destroy');
 
     Route::get('/admin/candidatures', [AdminController::class, 'candidatures'])
         ->name('admin.candidatures');

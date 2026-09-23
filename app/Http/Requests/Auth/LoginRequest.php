@@ -34,7 +34,7 @@ class LoginRequest extends FormRequest
     }
 
     /**
-     * Attempt to authenticate the request's credentials.
+     * verifi login de user .
      *
      * @throws ValidationException
      */

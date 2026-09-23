@@ -17,7 +17,7 @@ class Candidature extends Model
         'date_candidature',
         'statut',
     ];
-
+//student you have alotof 
     public function studentProfile(): BelongsTo
     {
         return $this->belongsTo(StudentProfile::class, 'profil_etudiant_id');

@@ -179,7 +179,7 @@ class CandidatureController extends Controller
 
         return redirect()->back()->with('success', 'Candidature acceptée.');
     }
-
+     //with khedama get hiya find
     public function companyRefuse(Request $request, $candidatureId)
     {
         $candidature = Candidature::with('offre')->find($candidatureId);

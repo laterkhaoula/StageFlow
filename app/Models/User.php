@@ -14,7 +14,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use Laratrust\Traits\HasRolesAndPermissions;
 
-#[Fillable(['name', 'email', 'password', 'role'])]
+#[Fillable(['name', 'email', 'password', 'role', 'is_active'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -47,6 +47,7 @@ class User extends Authenticatable
             'id' // Local key on student_profiles table
         );
     }
+
 
     public function dashboardRoute(): string
     {
@@ -81,6 +82,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_active' => 'boolean',
         ];
     }
 }

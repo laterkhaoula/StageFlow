@@ -9,7 +9,7 @@ use Tests\TestCase;
 class ProfileTest extends TestCase
 {
     use RefreshDatabase;
-
+//test   affichge page profile   
     public function test_profile_page_is_displayed(): void
     {
         $user = User::factory()->create();
@@ -20,7 +20,7 @@ class ProfileTest extends TestCase
 
         $response->assertOk();
     }
-
+  //you can modifi les info d user berefect 
     public function test_profile_information_can_be_updated(): void
     {
         $user = User::factory()->create();
@@ -60,7 +60,7 @@ class ProfileTest extends TestCase
 
         $this->assertNotNull($user->refresh()->email_verified_at);
     }
-
+//logout
     public function test_user_can_delete_their_account(): void
     {
         $user = User::factory()->create();

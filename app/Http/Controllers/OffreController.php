@@ -89,6 +89,7 @@ class OffreController extends Controller
 
     public function show(Request $request, Offre $offre)
     {
+        // Charger la relation companyProfile pour l'offre
         $offre->load('companyProfile');
 
         $user = $request->user();

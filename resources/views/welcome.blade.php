@@ -164,54 +164,61 @@
                     </div>
 
                     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 lg:pt-24 pb-32 sm:pb-36">
-                        <div class="mx-auto max-w-4xl text-center">
-                            <span class="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/15 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-[#F59E0B]">
-                                <span class="inline-block h-1.5 w-1.5 rounded-full bg-[#F59E0B]"></span>
-                                Plateforme de stages &amp; carrière
-                            </span>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 xl:gap-14 items-end">
 
-                            <h1 class="mt-6 text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.08]">
-                                TROUVE TON STAGE
-                                <span class="block mt-2 text-[#F59E0B]">ET LANCE TA CARRIÈRE</span>
-                            </h1>
+                            <!-- ============ Colonne gauche : contenu ============ -->
+                            <div class="text-center lg:text-left">
+                                <h1 class="mt-6 text-4xl sm:text-5xl xl:text-6xl font-black text-white tracking-tight leading-[1.08]">
+                                    TROUVE TON STAGE
+                                    <span class="block mt-2 text-[#F59E0B]">ET LANCE TA CARRIÈRE</span>
+                                </h1>
 
-                            <p class="mt-6 max-w-2xl mx-auto text-slate-300 text-base sm:text-lg leading-relaxed">
-                                Rejoins les étudiants et les entreprises qui préparent l'avenir.
-                                Dépose ton CV, explore des centaines d'offres de stage et pilote ta carrière depuis un seul endroit.
-                            </p>
+                                <p class="mt-6 lg:max-w-xl text-slate-300 text-base sm:text-lg leading-relaxed">
+                                    Rejoins les étudiants et les entreprises qui préparent l'avenir.
+                                    Dépose ton CV, explore des centaines d'offres de stage et pilote ta carrière depuis un seul endroit.
+                                </p>
 
-                            <!-- Boutons d'action -->
-                            <div class="mt-9 flex flex-wrap items-center justify-center gap-4">
-                                <a href="{{ route('offres.index') }}" class="inline-flex items-center justify-center gap-2.5 bg-[#2563EB] text-white px-8 py-4 rounded-full font-bold text-sm sm:text-base hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/25">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                    </svg>
-                                    Explorer les offres
-                                </a>
+                                <!-- Boutons d'action -->
+                                <div class="mt-9 flex flex-wrap items-center justify-center lg:justify-start gap-4">
+                                    <a href="{{ route('offres.index') }}" class="inline-flex items-center justify-center gap-2.5 bg-[#2563EB] text-white px-8 py-4 rounded-full font-bold text-sm sm:text-base hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/25">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                        </svg>
+                                        Explorer les offres
+                                    </a>
 
-                                <a href="{{ auth()->guest() ? route('register') : (auth()->user()->isEtudiant() ? route('student-profile.show') : route(auth()->user()->dashboardRoute())) }}" class="inline-flex items-center justify-center gap-2.5 bg-[#F59E0B] text-slate-900 px-8 py-4 rounded-full font-bold text-sm sm:text-base hover:bg-amber-400 transition-all shadow-lg shadow-amber-500/20">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                                    </svg>
-                                    Déposer mon CV
-                                </a>
+                                    <a href="{{ auth()->guest() ? route('register') : (auth()->user()->isEtudiant() ? route('student-profile.show') : route(auth()->user()->dashboardRoute())) }}" class="inline-flex items-center justify-center gap-2.5 bg-[#F59E0B] text-slate-900 px-8 py-4 rounded-full font-bold text-sm sm:text-base hover:bg-amber-400 transition-all shadow-lg shadow-amber-500/20">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                                        </svg>
+                                        Déposer mon CV
+                                    </a>
+                                </div>
+
+                                <!-- Compteurs -->
+                                <div class="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-lg mx-auto lg:mx-0">
+                                    <div class="rounded-2xl bg-white/5 border border-white/10 px-5 py-4">
+                                        <div class="text-2xl sm:text-3xl font-black text-white">{{ $statOffres !== null ? $statOffres.'+' : '—' }}</div>
+                                        <div class="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-400">Offres de stage actives</div>
+                                    </div>
+                                    <div class="rounded-2xl bg-white/5 border border-white/10 px-5 py-4">
+                                        <div class="text-2xl sm:text-3xl font-black text-[#F59E0B]">{{ $statEntreprises !== null ? $statEntreprises.'+' : '—' }}</div>
+                                        <div class="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-400">Entreprises partenaires</div>
+                                    </div>
+                                    <div class="rounded-2xl bg-white/5 border border-white/10 px-5 py-4">
+                                        <div class="text-2xl sm:text-3xl font-black text-white">{{ $statEtudiants !== null ? $statEtudiants.'+' : '—' }}</div>
+                                        <div class="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-400">Étudiants inscrits</div>
+                                    </div>
+                                </div>
                             </div>
 
-                            <!-- Compteurs -->
-                            <div class="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto">
-                                <div class="rounded-2xl bg-white/5 border border-white/10 px-6 py-5">
-                                    <div class="text-3xl font-black text-white">{{ $statOffres !== null ? $statOffres.'+' : '—' }}</div>
-                                    <div class="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-400">Offres de stage actives</div>
-                                </div>
-                                <div class="rounded-2xl bg-white/5 border border-white/10 px-6 py-5">
-                                    <div class="text-3xl font-black text-[#F59E0B]">{{ $statEntreprises !== null ? $statEntreprises.'+' : '—' }}</div>
-                                    <div class="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-400">Entreprises partenaires</div>
-                                </div>
-                                <div class="rounded-2xl bg-white/5 border border-white/10 px-6 py-5">
-                                    <div class="text-3xl font-black text-white">{{ $statEtudiants !== null ? $statEtudiants.'+' : '—' }}</div>
-                                    <div class="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-400">Étudiants inscrits</div>
+                            <!-- ============ Colonne droite : image ============ -->
+                            <div class="flex justify-center lg:justify-end">
+                                <div class="w-full max-w-xs sm:max-w-sm lg:max-w-md xl:max-w-lg">
+                                    <img src="{{ asset('images/khaoula_bag.jpeg') }}" alt="Étudiante en recherche de stage avec StageFlow" class="w-full h-auto object-contain object-bottom rounded-3xl shadow-2xl shadow-slate-950/40 ring-1 ring-white/10" />
                                 </div>
                             </div>
+
                         </div>
                     </div>
 
